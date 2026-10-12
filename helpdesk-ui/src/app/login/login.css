@@ -1,0 +1,4 @@
+.box { max-width: 320px; margin: 80px auto; padding: 24px; border: 1px solid #ddd; border-radius: 8px; }
+input { display: block; width: 100%; padding: 8px; margin-bottom: 12px; box-sizing: border-box; }
+button { width: 100%; padding: 10px; cursor: pointer; }
+.error { color: red; }
