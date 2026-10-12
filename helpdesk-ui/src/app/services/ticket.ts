@@ -12,6 +12,21 @@ export interface TicketItem {
   created_at: string;
 }
 
+export interface CommentItem {
+  id: number;
+  text: string;
+  user: string;
+  created_at: string;
+}
+
+export interface TicketDetailItem extends TicketItem {
+  comments: CommentItem[];
+}
+
+export interface StaffUser {
+  id: number;
+  username: string;
+}
 @Injectable({ providedIn: 'root' })
 export class Ticket {
   private http = inject(HttpClient);
@@ -27,5 +42,25 @@ export class Ticket {
 
   createTicket(data: { title: string; description: string; priority: string }) {
     return this.http.post<TicketItem>(`${this.api}/tickets/`, data);
+  }
+  
+  getTicket(id: number) {
+    return this.http.get<TicketDetailItem>(`${this.api}/tickets/${id}/`);
+  }
+
+  addComment(id: number, text: string) {
+    return this.http.post(`${this.api}/tickets/${id}/comment/`, { text });
+  }
+
+  assign(id: number, userId: number) {
+    return this.http.post(`${this.api}/tickets/${id}/assign/`, { user_id: userId });
+  }
+
+  changeStatus(id: number, status: string) {
+    return this.http.post(`${this.api}/tickets/${id}/change_status/`, { status });
+  }
+
+  getStaff() {
+    return this.http.get<StaffUser[]>(`${this.api}/staff/`);
   }
 }

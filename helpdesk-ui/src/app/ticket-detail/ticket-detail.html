@@ -1,1 +1,62 @@
-<p>ticket-detail works!</p>
+<div class="page">
+  <a routerLink="/tickets">← Back to tickets</a>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  @if (ticket(); as t) {
+    <h2>#{{ t.id }} {{ t.title }}</h2>
+
+    <div class="info">
+      <p><b>Status:</b> {{ t.status.replace('_', ' ') }}</p>
+      <p><b>Priority:</b> <span class="tag {{ t.priority }}">{{ t.priority }}</span></p>
+      <p><b>Created by:</b> {{ t.created_by }}</p>
+      <p><b>Assigned to:</b> {{ assignedName() }}</p>
+      <p><b>Created:</b> {{ t.created_at | date: 'dd MMM yyyy, HH:mm' }}</p>
+    </div>
+
+    <h3>Description</h3>
+    <p>{{ t.description }}</p>
+
+    @if (isStaff()) {
+      <div class="staff-box">
+        <h3>IT Staff Controls</h3>
+
+        <div class="row">
+          <select [(ngModel)]="selectedStaff">
+            <option [ngValue]="null">Select staff member</option>
+            @for (s of staff(); track s.id) {
+              <option [ngValue]="s.id">{{ s.username }}</option>
+            }
+          </select>
+          <button (click)="assign()">Assign</button>
+        </div>
+
+        <div class="row">
+          <span>Move to:</span>
+          @for (s of nextStatuses(); track s) {
+            <button (click)="changeStatus(s)">{{ s.replace('_', ' ') }}</button>
+          } @empty {
+            <span>No further status changes</span>
+          }
+        </div>
+      </div>
+    }
+
+    <h3>Comments ({{ t.comments.length }})</h3>
+    @for (c of t.comments; track c.id) {
+      <div class="comment">
+        <b>{{ c.user }}</b> <small>{{ c.created_at | date: 'dd MMM, HH:mm' }}</small>
+        <p>{{ c.text }}</p>
+      </div>
+    } @empty {
+      <p>No comments yet</p>
+    }
+
+    <div class="add-comment">
+      <textarea [(ngModel)]="newComment" rows="3" placeholder="Write a comment"></textarea>
+      <button (click)="addComment()">Add Comment</button>
+    </div>
+  }
+</div>
