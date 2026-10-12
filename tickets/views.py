@@ -23,6 +23,20 @@ def register(request):
                                  password=request.data['password'])
     return Response({'id': u.id, 'username': u.username}, status=201)
 
+@api_view(['GET'])
+def me(request):
+    return Response({
+        'id': request.user.id,
+        'username': request.user.username,
+        'is_staff': request.user.is_staff,
+    })
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def staff_list(request):
+    users = User.objects.filter(is_staff=True).values('id', 'username')
+    return Response(list(users))
+
 
 class TicketViewSet(viewsets.ModelViewSet):
     serializer_class = TicketSerializer
@@ -62,3 +76,4 @@ class TicketViewSet(viewsets.ModelViewSet):
         s.is_valid(raise_exception=True)
         s.save(ticket=ticket, user=request.user)
         return Response(s.data, status=201)
+
