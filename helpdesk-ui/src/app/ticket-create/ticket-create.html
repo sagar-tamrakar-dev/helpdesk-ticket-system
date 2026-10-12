@@ -1,1 +1,26 @@
-<p>ticket-create works!</p>
+<div class="box">
+  <a routerLink="/tickets">← Back to tickets</a>
+  <h2>New Ticket</h2>
+
+  <form (ngSubmit)="onSubmit()">
+    <label>Title</label>
+    <input name="title" [(ngModel)]="title" placeholder="e.g. WiFi not working" required />
+
+    <label>Description</label>
+    <textarea name="description" [(ngModel)]="description" rows="5"
+      placeholder="Describe the problem" required></textarea>
+
+    <label>Priority</label>
+    <select name="priority" [(ngModel)]="priority">
+      <option value="LOW">Low</option>
+      <option value="MEDIUM">Medium</option>
+      <option value="HIGH">High</option>
+    </select>
+
+    <button type="submit">Create Ticket</button>
+  </form>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+</div>

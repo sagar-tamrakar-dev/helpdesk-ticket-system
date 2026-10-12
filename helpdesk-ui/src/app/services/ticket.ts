@@ -24,4 +24,8 @@ export class Ticket {
     if (filters.priority) params = params.set('priority', filters.priority);
     return this.http.get<TicketItem[]>(`${this.api}/tickets/`, { params });
   }
+
+  createTicket(data: { title: string; description: string; priority: string }) {
+    return this.http.post<TicketItem>(`${this.api}/tickets/`, data);
+  }
 }
