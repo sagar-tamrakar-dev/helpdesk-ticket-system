@@ -1,0 +1,6 @@
+[MASTER]
+load-plugins=pylint_django
+init-hook='import os, sys; sys.path.append(os.getcwd())'
+
+[pylint_django]
+django-settings-module=config.settings
